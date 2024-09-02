@@ -1,0 +1,18 @@
+import React from "react";
+
+function Banner() {
+  return (
+    <div
+      className="h-[20vh] md:h-[85vh] bg-cover bg-center flex items-end"
+      style={{
+        backgroundImage: `url(https://i.pinimg.com/originals/29/7d/e0/297de0761b0c756266d74ca50d03cc1d.jpg)`,
+      }}
+    >
+      <div className="text-white text-2xl w-full text-center bg-gray-600/60 p-4">
+        Avengers Endgame
+      </div>
+    </div>
+  );
+}
+
+export default Banner;
