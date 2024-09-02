@@ -21,10 +21,10 @@ function Movies({ handleAddtoWatchlist, handleRemovefromWatchlist, Watchlist }) 
 
   useEffect(() => {
     axios
-      .get(`http://www.omdbapi.com/?s=movie&apikey=caa52171&page=${pageNo}`)
+      .get(`https://www.omdbapi.com/?s=movie&apikey=caa52171&page=${pageNo}`)
       .then((res) => {
         if (res.data.Response === "True") {
-          console.log(res.data)
+          console.log(res.data);
           setMovies(res.data.Search); // OMDb returns 'Search' array for multiple results
         } else {
           console.error("No movies found:", res.data.Error);
