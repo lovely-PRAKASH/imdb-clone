@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-function WatchList({ Watchlist, setWatchList, handleRemovefromWatchlist }) {
+function WatchList({ Watchlist, setWatchList }) {
   const [search, setSearch] = useState("");
   const [genreList, setGenreList] = useState(["All Genres"]);
   const [currGenre, setCurrGenre] = useState("All Genres");
@@ -34,6 +34,13 @@ function WatchList({ Watchlist, setWatchList, handleRemovefromWatchlist }) {
     tempGenres = [...new Set(tempGenres)]; // Make unique
     setGenreList(["All Genres", ...tempGenres]);
   }, [Watchlist]);
+
+  // Updated delete function
+  let handleRemovefromWatchlist = (imdbID) => {
+    setWatchList((prevWatchlist) =>
+      prevWatchlist.filter((movie) => movie.imdbID !== imdbID)
+    );
+  };
 
   return (
     <>
@@ -79,6 +86,7 @@ function WatchList({ Watchlist, setWatchList, handleRemovefromWatchlist }) {
                   </div>
                 </th>
                 <th>Genre</th>
+                <th>Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -108,9 +116,7 @@ function WatchList({ Watchlist, setWatchList, handleRemovefromWatchlist }) {
                       <td>{movieObj.imdbRating ? movieObj.imdbRating : "N/A"}</td>
                       <td>{movieObj.Genre ? movieObj.Genre.split(", ")[0] : "Unknown Genre"}</td>
                       <td
-                        onClick={() => {
-                          handleRemovefromWatchlist(movieObj.imdbID); // Pass imdbID to remove only the selected movie
-                        }}
+                        onClick={() => handleRemovefromWatchlist(movieObj.imdbID)} // Use the updated delete function
                         className="text-red-600 hover:cursor-pointer"
                       >
                         Delete
