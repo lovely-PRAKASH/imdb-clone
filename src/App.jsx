@@ -18,52 +18,48 @@ function App() {
   };
 
   let handleRemovefromWatchlist = (movieObj) => {
-    let filterWatchlist = Watchlist.filter((movie) => {
-      return movie.id != movieObj.id;
-    });
+    let filterWatchlist = Watchlist.filter((movie) => movie.id !== movieObj.id);
     setWatchList(filterWatchlist);
     localStorage.setItem("moviesApp", JSON.stringify(filterWatchlist));
     console.log(filterWatchlist);
   };
 
   useEffect(() => {
-    let moviesFromLocalStoage = localStorage.getItem("moviesApp");
-    if (!moviesFromLocalStoage) {
-      return;
-    } else setWatchList(JSON.parse(moviesFromLocalStoage));
+    let moviesFromLocalStorage = localStorage.getItem("moviesApp");
+    if (moviesFromLocalStorage) {
+      setWatchList(JSON.parse(moviesFromLocalStorage));
+    }
   }, []);
 
   return (
-    <>
-      <BrowserRouter>
-        <Navbar />
-        <Routes>
-          <Route
-            path="/"
-            element={
-              <>
-                <Banner />
-                <Movies
-                  Watchlist={Watchlist}
-                  handleAddtoWatchlist={handleAddtoWatchlist}
-                  handleRemovefromWatchlist={handleRemovefromWatchlist}
-                />
-              </>
-            }
-          />
-          <Route
-            path="/watchlist"
-            element={
-              <WatchList
+    <BrowserRouter basename="/imdb-clone">
+      <Navbar />
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <>
+              <Banner />
+              <Movies
                 Watchlist={Watchlist}
-                setWatchList={setWatchList}
+                handleAddtoWatchlist={handleAddtoWatchlist}
                 handleRemovefromWatchlist={handleRemovefromWatchlist}
               />
-            }
-          />
-        </Routes>
-      </BrowserRouter>
-    </>
+            </>
+          }
+        />
+        <Route
+          path="/watchlist"
+          element={
+            <WatchList
+              Watchlist={Watchlist}
+              setWatchList={setWatchList}
+              handleRemovefromWatchlist={handleRemovefromWatchlist}
+            />
+          }
+        />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
