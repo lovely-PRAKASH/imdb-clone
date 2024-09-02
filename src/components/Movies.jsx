@@ -3,33 +3,35 @@ import MovieCard from "./MovieCard";
 import axios from "axios";
 import Pagination from "./Pagination";
 
-function Movies({
-  handleAddtoWatchlist,
-  handleRemovefromWatchlist,
-  Watchlist,
-}) {
+function Movies({ handleAddtoWatchlist, handleRemovefromWatchlist, Watchlist }) {
   const [movies, setMovies] = useState([]);
-  const [pageNo, setpageNo] = useState(1);
+  const [pageNo, setPageNo] = useState(1);
 
   const handlePrev = () => {
     if (pageNo === 1) {
-      setpageNo(1);
+      setPageNo(1);
     } else {
-      setpageNo(pageNo - 1);
+      setPageNo(pageNo - 1);
     }
   };
+
   const handleNext = () => {
-    setpageNo(pageNo + 1);
+    setPageNo(pageNo + 1);
   };
 
   useEffect(() => {
     axios
-      .get(
-        `https://api.themoviedb.org/3/movie/popular?api_key=022336715fd4ca22993ab9629dd6cf25&language=en-US&page=${pageNo}`
-      )
-      .then(function (res) {
-        console.log(res.data.results);
-        setMovies(res.data.results);
+      .get(`http://www.omdbapi.com/?s=movie&apikey=caa52171&page=${pageNo}`)
+      .then((res) => {
+        if (res.data.Response === "True") {
+          console.log(res.data)
+          setMovies(res.data.Search); // OMDb returns 'Search' array for multiple results
+        } else {
+          console.error("No movies found:", res.data.Error);
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching the movies:", error);
       });
   }, [pageNo]);
 
@@ -37,29 +39,21 @@ function Movies({
     <div className="p-2">
       <div className="m-5 font-bold text-xl text-center">Trending Movies</div>
       <div className="flex flex-row flex-wrap justify-around gap-3">
-        {movies.map((movieObj) => {
-          return (
-            <MovieCard
-              key={movieObj.id}
-              movieObj={movieObj}
-              poster_path={movieObj.poster_path}
-              name={movieObj.original_title}
-              handleAddtoWatchlist={handleAddtoWatchlist}
-              handleRemovefromWatchlist={handleRemovefromWatchlist}
-              Watchlist={Watchlist}
-            />
-          );
-        })}
+        {movies.map((movieObj) => (
+          <MovieCard
+            key={movieObj.imdbID}
+            movieObj={movieObj}
+            poster_path={movieObj.Poster}
+            name={movieObj.Title}
+            handleAddtoWatchlist={handleAddtoWatchlist}
+            handleRemovefromWatchlist={handleRemovefromWatchlist}
+            Watchlist={Watchlist}
+          />
+        ))}
       </div>
-      <Pagination
-        pageNo={pageNo}
-        handlePrev={handlePrev}
-        handleNext={handleNext}
-      />
+      <Pagination pageNo={pageNo} handlePrev={handlePrev} handleNext={handleNext} />
     </div>
   );
 }
 
 export default Movies;
-
-// https://api.themoviedb.org/3/movie/popular?api_key=022336715fd4ca22993ab9629dd6cf25&language=en-US&page=1
