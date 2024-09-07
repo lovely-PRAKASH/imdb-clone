@@ -9,7 +9,7 @@ import { useEffect, useState } from "react";
 
 function App() {
   let [Watchlist, setWatchList] = useState([]);
-
+// watchlist handler
   let handleAddtoWatchlist = (movieObj) => {
     let newWatchList = [...Watchlist, movieObj];
     localStorage.setItem("moviesApp", JSON.stringify(newWatchList));
